@@ -1,7 +1,7 @@
-#terraform {
-#  backend "s3" {
-#    bucket = "nessaoana-kubernetes-terraform-state"
-#    key    = "kubernetes/terraform.tfstate"
-#    region = "us-east-1"
-#  }
-#}
+terraform {
+  backend "s3" {
+    bucket = "fiap-terraform-kubernetes"
+    key    = "kubernetes/terraform.tfstate"
+    region = "us-east-1"
+  }
+}

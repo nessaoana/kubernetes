@@ -28,7 +28,7 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-resource "aws_route_table" "route_table_local" {
+resource "aws_route_table" "route_table" {
   vpc_id = aws_vpc.main.id
 
   route {
@@ -36,28 +36,20 @@ resource "aws_route_table" "route_table_local" {
     gateway_id = "local"
   }
 
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
   tags = {
     Name = var.project_name
   }
 }
 
-#resource "aws_route_table" "route_table_public" {
-#  vpc_id = aws_vpc.main.id
-#
-#  route {
-#    cidr_block = aws_vpc.main.cidr_block
-#    gateway_id = aws_internet_gateway.igw.id
-#  }
-#
-#  tags = {
-#    Name = var.project_name
-#  }
-#}
-
 resource "aws_route_table_association" "rt_association_public" {
   count          = length(aws_subnet.subnets_public)
   subnet_id      = aws_subnet.subnets_public[count.index].id
-  route_table_id = aws_route_table.route_table_local.id
+  route_table_id = aws_route_table.route_table.id
   depends_on = [
     aws_subnet.subnets_public
   ]
